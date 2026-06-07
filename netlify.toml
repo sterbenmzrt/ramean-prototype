@@ -1,0 +1,7 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/Ramean.id.html"
+  to = "/"
+  status = 301
