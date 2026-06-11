@@ -130,7 +130,7 @@ function GroupsTab({ svc }) {
                       Anggota ({g.filledSlots}/{g.totalSlots})
                     </span>
                     <Link href={`/checkout/${g.id}`}>
-                      <span className="px-4 py-1.5 rounded-lg bg-[#F97316] text-white text-xs font-bold font-body cursor-pointer inline-block">
+                      <span className="px-4 py-1.5 rounded-lg bg-primary text-white text-xs font-bold font-body cursor-pointer inline-block">
                         + Gabung
                       </span>
                     </Link>

@@ -21,6 +21,9 @@ wireframe/
 *.db
 *.db-journal
 
+# brainstorm visual companion
+.superpowers/
+
 # misc
 .DS_Store
 *.pem

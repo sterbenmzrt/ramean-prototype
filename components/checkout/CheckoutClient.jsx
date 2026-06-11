@@ -15,16 +15,16 @@ export default function CheckoutClient({ group, adminFee, walletBalance, already
   const total = price + adminFee;
   const discount = svc.originalPrice - price;
 
-  const [method, setMethod] = useState("qris");
+  const [method, setMethod] = useState("saldo");
   const [step, setStep] = useState(alreadyMember ? "already" : "form");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const payMethods = [
     { id: "saldo", lbl: "Saldo Ramean", sub: `Saldo kamu: ${fmt(walletBalance)}` },
-    { id: "qris", lbl: "QRIS", sub: "Scan QR dari semua e-wallet & bank" },
-    { id: "bca", lbl: "Transfer BCA", sub: "Virtual Account BCA otomatis" },
-    { id: "gopay", lbl: "GoPay", sub: "Bayar langsung via aplikasi GoPay" },
+    { id: "qris", lbl: "QRIS", sub: "Simulasi demo — pembayaran tidak diproses" },
+    { id: "bca", lbl: "Transfer BCA", sub: "Simulasi demo — pembayaran tidak diproses" },
+    { id: "gopay", lbl: "GoPay", sub: "Simulasi demo — pembayaran tidak diproses" },
   ];
 
   async function confirm() {
@@ -64,7 +64,7 @@ export default function CheckoutClient({ group, adminFee, walletBalance, already
           lobby untuk melihat info grup.
         </p>
         <Link href={`/lobby/${group.id}`}>
-          <Btn variant="primary" full size="lg">Masuk ke Lobby</Btn>
+          <Btn variant="primary" size="lg">Masuk ke Lobby</Btn>
         </Link>
       </Centered>
     );
@@ -88,7 +88,7 @@ export default function CheckoutClient({ group, adminFee, walletBalance, already
           Detail akun akan tersedia di lobby grup.
         </p>
         <Link href={`/lobby/${group.id}`}>
-          <Btn variant="primary" full size="lg">Masuk ke Lobby</Btn>
+          <Btn variant="primary" size="lg">Masuk ke Lobby</Btn>
         </Link>
       </Centered>
     );

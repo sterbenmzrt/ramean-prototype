@@ -106,12 +106,6 @@ function LoginForm() {
             </div>
           </Field>
 
-          <div className="text-right mb-5">
-            <a href="#" className="text-xs text-text-md no-underline font-body">
-              Lupa password?
-            </a>
-          </div>
-
           <Btn type="submit" variant="primary" full size="lg" disabled={loading}>
             {loading ? "Memproses…" : "Masuk"}
           </Btn>
@@ -145,7 +139,7 @@ function LoginForm() {
         </div>
       </div>
 
-      <div className="mt-6 text-xs text-text-sm font-body">© 2025 Ramean</div>
+      <div className="mt-6 text-xs text-text-sm font-body">© 2026 Ramean</div>
     </div>
   );
 }

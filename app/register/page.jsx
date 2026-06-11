@@ -194,13 +194,9 @@ export default function RegisterPage() {
 
           <div className="text-xs text-text-md font-body mb-5 leading-relaxed text-center">
             Dengan mendaftar, kamu menyetujui{" "}
-            <a href="#" className="text-primary no-underline font-medium">
-              Syarat &amp; Ketentuan
-            </a>{" "}
+            <span className="text-primary font-medium">Syarat &amp; Ketentuan</span>{" "}
             dan{" "}
-            <a href="#" className="text-primary no-underline font-medium">
-              Kebijakan Privasi
-            </a>{" "}
+            <span className="text-primary font-medium">Kebijakan Privasi</span>{" "}
             Ramean.
           </div>
 
@@ -219,7 +215,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="mt-6 text-xs text-text-sm font-body">© 2025 Ramean</div>
+      <div className="mt-6 text-xs text-text-sm font-body">© 2026 Ramean</div>
     </div>
   );
 }
