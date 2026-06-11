@@ -13,10 +13,10 @@ export default function Field({ label, htmlFor, children, hint, error }) {
       </label>
       {children}
       {hint && !error && (
-        <div className="text-[11px] text-text-sm mt-[5px] font-body">{hint}</div>
+        <div id={`${htmlFor}-hint`} className="text-[11px] text-text-sm mt-[5px] font-body">{hint}</div>
       )}
       {error && (
-        <div className="text-[11px] text-err mt-[5px] font-body">{error}</div>
+        <div id={`${htmlFor}-error`} className="text-[11px] text-err mt-[5px] font-body">{error}</div>
       )}
     </div>
   );

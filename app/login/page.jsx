@@ -81,6 +81,7 @@ function LoginForm() {
               onChange={(e) => up("email", e.target.value)}
               placeholder="email@kamu.com"
               type="email"
+              aria-invalid={Boolean(error)}
               className={inputClass}
             />
           </Field>
@@ -93,13 +94,14 @@ function LoginForm() {
                 onChange={(e) => up("password", e.target.value)}
                 placeholder="••••••••"
                 type={showPw ? "text" : "password"}
-                className={inputClass + " pr-10"}
+                aria-invalid={Boolean(error)}
+                className={inputClass + " pr-12"}
               />
               <button
                 type="button"
                 aria-label={showPw ? "Sembunyikan password" : "Tampilkan password"}
                 onClick={() => setShowPw(!showPw)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-text-md inline-flex"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center bg-none border-none cursor-pointer text-text-md"
               >
                 {showPw ? <EyeOffIcon /> : <EyeIcon />}
               </button>

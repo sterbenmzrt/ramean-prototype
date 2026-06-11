@@ -147,13 +147,14 @@ export default function RegisterPage() {
                 onChange={(e) => up("password", e.target.value)}
                 placeholder="Min. 8 karakter"
                 type={showPw ? "text" : "password"}
-                className={inputClass + " pr-10"}
+                aria-invalid={Boolean(error)}
+                className={inputClass + " pr-12"}
               />
               <button
                 type="button"
                 aria-label={showPw ? "Sembunyikan password" : "Tampilkan password"}
                 onClick={() => setShowPw(!showPw)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-text-md inline-flex"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center bg-none border-none cursor-pointer text-text-md"
               >
                 {showPw ? <EyeOffIcon /> : <EyeIcon />}
               </button>
@@ -172,7 +173,9 @@ export default function RegisterPage() {
                 onChange={(e) => up("confirm", e.target.value)}
                 placeholder="Ulangi password"
                 type={showConfirm ? "text" : "password"}
-                className={inputClass + " pr-10"}
+                aria-invalid={!pwMatch}
+                aria-describedby="confirm-error"
+                className={inputClass + " pr-12"}
                 style={{
                   borderColor: !pwMatch
                     ? "#FCA5A5"
@@ -185,7 +188,7 @@ export default function RegisterPage() {
                 type="button"
                 aria-label={showConfirm ? "Sembunyikan password" : "Tampilkan password"}
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 bg-none border-none cursor-pointer text-text-md inline-flex"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center bg-none border-none cursor-pointer text-text-md"
               >
                 {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
               </button>
