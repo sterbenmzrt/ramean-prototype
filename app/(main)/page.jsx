@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServiceCards } from "@/lib/data";
 import ServiceGrid from "@/components/marketplace/ServiceGrid";
 import Btn from "@/components/ui/Btn";
+import Reveal from "@/components/ui/Reveal";
 import { ImageIcon } from "@/components/ui/icons";
 
 export const dynamic = "force-dynamic";
@@ -111,6 +112,7 @@ export default async function LandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
+      <Reveal>
       <section className="max-w-[1240px] mx-auto px-10 py-20 border-t border-border">
         <SectionHeading
           tagline="Cara Kerja"
@@ -127,8 +129,10 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+      </Reveal>
 
       {/* WHY CHOOSE */}
+      <Reveal>
       <section className="max-w-[1240px] mx-auto px-10 py-20 border-t border-border">
         <div className="grid grid-cols-2 gap-20 max-md:grid-cols-1 max-md:gap-10">
           <div>
@@ -155,8 +159,10 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+      </Reveal>
 
       {/* WHAT WE OFFER (marketplace grid dari DB) */}
+      <Reveal>
       <section className="max-w-[1240px] mx-auto px-10 py-20 border-t border-border">
         <div className="text-center mb-12">
           <div className="text-[11px] font-semibold text-text-md font-body tracking-[0.08em] uppercase mb-4">
@@ -179,8 +185,10 @@ export default async function LandingPage() {
           </Link>
         </div>
       </section>
+      </Reveal>
 
       {/* PERSONAL SERVICE CTA */}
+      <Reveal>
       <section className="max-w-[1240px] mx-auto px-10 pt-20 pb-[100px] border-t border-border">
         <div className="grid grid-cols-2 gap-20 items-center max-md:grid-cols-1 max-md:gap-10">
           <div>
@@ -204,6 +212,7 @@ export default async function LandingPage() {
           <ImagePlaceholder minHeight={440} />
         </div>
       </section>
+      </Reveal>
     </div>
   );
 }
