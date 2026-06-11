@@ -18,23 +18,13 @@ export default async function MarketplacePage() {
           </h1>
           <p className="text-text-md text-[17px] leading-relaxed font-body max-w-[520px] mx-auto">
             Temukan layanan yang tepat untukmu. Streaming, produktivitas, AI tools, dan
-            lainnya — dengan harga hingga 93% lebih hemat.
+            lainnya — dengan harga patungan yang jauh lebih hemat.
           </p>
         </div>
       </div>
 
       {/* Filter + grid */}
       <div className="max-w-[1240px] mx-auto px-10 py-12">
-        <div className="mb-9">
-          <div className="text-[11px] font-semibold text-text-sm tracking-[0.08em] uppercase font-body mb-2">
-            Layanan
-          </div>
-          <h2 className="font-heading font-bold text-[28px] text-text m-0">Katalog</h2>
-          <p className="text-text-md text-[13px] font-body mt-1">
-            Filter berdasarkan kategori untuk menemukan yang kamu butuhkan
-          </p>
-        </div>
-
         <ServiceGrid services={services} />
       </div>
     </div>
