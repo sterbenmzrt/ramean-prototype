@@ -18,9 +18,16 @@ body {
 input::placeholder {
   color: #8a93a3;
 }
-input:focus {
+input:focus-visible {
   border-color: #1b3c78 !important;
   box-shadow: 0 0 0 3px rgba(27, 60, 120, 0.12);
+  outline: none;
+}
+
+:where(a, button, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid #03346e;
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
 ::-webkit-scrollbar {
@@ -52,4 +59,17 @@ input:focus {
 }
 .page-anim {
   animation: pageIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
 }
