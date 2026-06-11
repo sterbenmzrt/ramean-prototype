@@ -44,7 +44,7 @@ export default function ServiceCard({ svc }) {
 
       <div className="font-heading font-bold text-sm text-text leading-tight">{svc.name}</div>
 
-      <div className="font-heading font-extrabold text-[17px] text-[#D97706]">
+      <div className="font-heading font-extrabold text-[17px] text-primary">
         {fmt(svc.price)}
         <span className="text-[11px] font-medium text-text-md"> /30h</span>
       </div>
