@@ -1,5 +1,6 @@
 wireframe/
 .claude/
+.docs/
 
 # dependencies
 /node_modules
