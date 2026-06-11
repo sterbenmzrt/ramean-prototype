@@ -18,6 +18,7 @@ model User {
   passwordHash String? // null untuk akun yang dibuat via Google OAuth
   image        String?
   createdAt    DateTime @default(now())
+  role         String   @default("USER") // USER | ADMIN
 
   wallet        Wallet?
   subscriptions Subscription[]
