@@ -44,13 +44,14 @@ export default function NavBar() {
         <div className="flex gap-2.5 items-center">
           {loggedIn ? (
             <>
-              <div
-                className="w-[38px] h-[38px] rounded-full bg-primary text-white flex items-center justify-center font-heading font-bold text-[15px]"
+              <Link
+                href="/akun"
                 title={session.user?.name}
-                aria-label={session.user?.name}
+                aria-label="Akun saya"
+                className="w-[38px] h-[38px] rounded-full bg-primary text-white flex items-center justify-center font-heading font-bold text-[15px] no-underline"
               >
                 {initials(session.user?.name)}
-              </div>
+              </Link>
               <Btn variant="ghost" size="sm" onClick={() => signOut({ callbackUrl: "/" })}>
                 Keluar
               </Btn>
