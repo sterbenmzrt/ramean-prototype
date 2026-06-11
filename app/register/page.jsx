@@ -70,7 +70,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="bg-bg min-h-screen flex flex-col items-center justify-center px-5 py-10">
+    <div className="page-anim bg-bg min-h-screen flex flex-col items-center justify-center px-5 py-10">
       <Link href="/" className="mb-7">
         <RameanLogo size={36} />
       </Link>
