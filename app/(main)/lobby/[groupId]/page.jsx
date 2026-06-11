@@ -112,7 +112,7 @@ export default async function LobbyPage({ params }) {
                         {mine && <span className="ml-2 text-[10px] text-primary font-bold">● kamu</span>}
                       </div>
                       <div className="text-[11px] text-text-sm font-body">
-                        {m.paymentStatus === "PAID" ? "Pembayaran lunas" : "Menunggu pembayaran"}
+                        {m.paymentStatus === "PAID" ? "Akses dirilis" : "Menunggu rilis akses"}
                       </div>
                     </div>
                     <CheckIcon className="text-ok shrink-0" width={16} height={16} />

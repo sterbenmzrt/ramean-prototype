@@ -75,7 +75,7 @@ export async function POST(request) {
       });
 
       await tx.groupMember.create({
-        data: { groupId, userId, paymentStatus: "PAID", role: "MEMBER" },
+        data: { groupId, userId, paymentStatus: "PENDING", role: "MEMBER" },
       });
 
       await tx.transaction.create({
@@ -84,7 +84,7 @@ export async function POST(request) {
           subscriptionId: subscription.id,
           amount: total,
           type: "PAYMENT",
-          status: "SUCCESS", // mock escrow: pada demo langsung SUCCESS
+          status: "HELD", // escrow: dana ditahan sampai admin rilis
         },
       });
 
