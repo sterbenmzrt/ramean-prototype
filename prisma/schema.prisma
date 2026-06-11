@@ -1,0 +1,101 @@
+// Skema Prisma Ramean MVP — diturunkan dari docs/ERD.md.
+// CATATAN: SQLite tidak mendukung enum di Prisma, jadi field "enum" memakai String
+// dengan nilai sah yang didokumentasikan di komentar masing-masing field.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String? // null untuk akun yang dibuat via Google OAuth
+  image        String?
+  createdAt    DateTime @default(now())
+
+  wallet        Wallet?
+  subscriptions Subscription[]
+  transactions  Transaction[]
+  memberships   GroupMember[]
+}
+
+model Service {
+  id            String  @id @default(cuid())
+  name          String
+  category      String // STREAMING | AI_TOOLS | PRODUCTIVITY | ENTERTAINMENT
+  logoUrl       String
+  originalPrice Int
+  description   String
+
+  groups Group[]
+}
+
+model Group {
+  id           String   @id @default(cuid())
+  serviceId    String
+  hostName     String // dummy untuk MVP
+  totalSlots   Int
+  filledSlots  Int      @default(0)
+  pricePerSlot Int
+  renewalDate  DateTime
+  status       String   @default("AVAILABLE") // AVAILABLE | FULL | INACTIVE
+  rules        String?
+
+  service       Service        @relation(fields: [serviceId], references: [id])
+  subscriptions Subscription[]
+  members       GroupMember[]
+}
+
+model Subscription {
+  id              String   @id @default(cuid())
+  userId          String
+  groupId         String
+  status          String   @default("ACTIVE") // ACTIVE | PENDING | EXPIRED
+  joinedAt        DateTime @default(now())
+  autoRenewal     Boolean  @default(true)
+  nextBillingDate DateTime
+
+  user         User          @relation(fields: [userId], references: [id])
+  group        Group         @relation(fields: [groupId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id             String   @id @default(cuid())
+  userId         String
+  subscriptionId String? // null untuk TOPUP yang tidak terkait subscription
+  amount         Int
+  type           String // PAYMENT | TOPUP | REFUND
+  status         String // SUCCESS | PENDING | HELD
+  createdAt      DateTime @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+  subscription Subscription? @relation(fields: [subscriptionId], references: [id])
+}
+
+model Wallet {
+  id      String @id @default(cuid())
+  userId  String @unique
+  balance Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model GroupMember {
+  id            String @id @default(cuid())
+  groupId       String
+  userId        String
+  paymentStatus String @default("PENDING") // PAID | PENDING
+  role          String @default("MEMBER") // HOST | MEMBER
+
+  group Group @relation(fields: [groupId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([groupId, userId])
+}
