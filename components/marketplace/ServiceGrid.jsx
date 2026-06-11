@@ -20,7 +20,7 @@ export default function ServiceGrid({ services, centered = false }) {
             <button
               key={c}
               onClick={() => setCat(c)}
-              className={`px-[18px] py-2 cursor-pointer font-body text-[13px] font-medium transition-all border ${
+              className={`px-[18px] py-2.5 min-h-[44px] inline-flex items-center cursor-pointer font-body text-[13px] font-medium transition-all border ${
                 centered ? "rounded-full" : "rounded-md"
               } ${
                 active
