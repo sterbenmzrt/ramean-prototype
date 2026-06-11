@@ -64,7 +64,7 @@ export default function CheckoutClient({ group, adminFee, walletBalance, already
           lobby untuk melihat info grup.
         </p>
         <Link href={`/lobby/${group.id}`}>
-          <Btn variant="primary" full size="lg">Masuk ke Lobby</Btn>
+          <Btn variant="primary" size="lg">Masuk ke Lobby</Btn>
         </Link>
       </Centered>
     );
@@ -88,7 +88,7 @@ export default function CheckoutClient({ group, adminFee, walletBalance, already
           Detail akun akan tersedia di lobby grup.
         </p>
         <Link href={`/lobby/${group.id}`}>
-          <Btn variant="primary" full size="lg">Masuk ke Lobby</Btn>
+          <Btn variant="primary" size="lg">Masuk ke Lobby</Btn>
         </Link>
       </Centered>
     );
