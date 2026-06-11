@@ -28,7 +28,7 @@ export default function Btn({
   className = "",
 }) {
   const base =
-    "font-body font-medium rounded-lg inline-flex items-center justify-center gap-2 whitespace-nowrap leading-none transition-all";
+    "font-body font-medium rounded-lg inline-flex items-center justify-center gap-2 whitespace-nowrap leading-none transition-all active:scale-[0.98]";
   return (
     <button
       type={type}
