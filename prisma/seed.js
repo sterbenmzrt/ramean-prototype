@@ -119,6 +119,17 @@ async function main() {
     },
   });
 
+  // User admin (akses panel /admin).
+  await prisma.user.create({
+    data: {
+      name: "Admin Ramean",
+      email: "admin@ramean.id",
+      passwordHash: await bcrypt.hash("admin123", 10),
+      role: "ADMIN",
+      wallet: { create: { balance: 0 } },
+    },
+  });
+
   // User dummy untuk mengisi anggota grup (tanpa password / tidak bisa login).
   const members = [];
   for (let i = 0; i < MEMBER_NAMES.length; i++) {
