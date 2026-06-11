@@ -16,7 +16,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 input::placeholder {
-  color: #b6becc;
+  color: #8a93a3;
 }
 input:focus {
   border-color: #1b3c78 !important;
