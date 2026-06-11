@@ -58,9 +58,6 @@ function StepCard({ label, title, desc, ctaLabel, active = false }) {
             {ctaLabel}
           </Btn>
         </Link>
-        <Btn variant="ghost" size={active ? "md" : "sm"}>
-          Pelajari lebih lanjut
-        </Btn>
       </div>
     </div>
   );
@@ -80,34 +77,6 @@ function WhyItem({ num, title, desc }) {
   );
 }
 
-function TestimonialCard({ brandName, text, name, role }) {
-  return (
-    <div className="border border-border p-8 bg-white flex flex-col">
-      <div className="font-bold font-heading text-lg mb-6 text-text">{brandName}</div>
-      <p className="text-[15px] text-text leading-[1.7] flex-1 mb-8 font-body">{text}</p>
-      <div className="flex gap-3.5 items-center">
-        <div className="w-11 h-11 rounded-full bg-border-lt shrink-0" />
-        <div>
-          <div className="font-semibold font-heading text-sm mb-[3px] text-text">{name}</div>
-          <div className="text-[13px] text-text-md font-body">{role}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FaqItem({ title, desc, linkLabel }) {
-  return (
-    <div>
-      <h4 className="font-heading font-semibold text-[17px] mb-2.5 text-text">{title}</h4>
-      <p className="text-text-md text-sm leading-relaxed mb-3.5 font-body">{desc}</p>
-      <a href="#" className="text-[13px] text-text font-medium no-underline font-body">
-        {linkLabel}
-      </a>
-    </div>
-  );
-}
-
 // ── Landing page ───────────────────────────────────────────────────────────
 export default async function LandingPage() {
   const services = await getServiceCards();
@@ -121,8 +90,9 @@ export default async function LandingPage() {
             Nikmati layanan premium tanpa biaya penuh
           </h1>
           <p className="text-[17px] text-text-md leading-relaxed mb-10 max-w-[460px] font-body">
-            Ramean memungkinkan kamu mengakses Netflix, Canva, AI tools, dan lainnya dengan
-            harga yang jauh lebih hemat. Bayar sesuai kebutuhan, tanpa kontrak jangka panjang.
+            Ramean menggabungkanmu ke grup patungan untuk Netflix, Canva, AI tools, dan
+            lainnya — jadi kamu cukup bayar bagianmu. Dana ditahan di escrow sampai akses
+            kamu terverifikasi.
           </p>
           <div className="flex gap-3.5">
             <Link href="/marketplace">
@@ -140,45 +110,6 @@ export default async function LandingPage() {
         <ImagePlaceholder minHeight={480} />
       </section>
 
-      {/* STATS */}
-      <section className="max-w-[1240px] mx-auto px-10 py-20 border-t border-border">
-        <div className="grid grid-cols-2 gap-16 mb-16 items-start max-md:grid-cols-1">
-          <SectionHeading tagline="Angka Nyata" title="Dipercaya puluhan ribu pengguna aktif" />
-          <div>
-            <p className="text-base text-text-md leading-relaxed mb-7 font-body">
-              Ribuan orang sudah membuktikan bahwa Ramean adalah cara paling cerdas untuk
-              menikmati layanan premium. Kami bukan sekadar platform — kami adalah solusi nyata
-              untuk penghematan bulananmu.
-            </p>
-            <div className="flex gap-3">
-              <Link href="/marketplace">
-                <Btn variant="outline" size="md">
-                  Jelajahi Layanan
-                </Btn>
-              </Link>
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 border-t border-border max-md:grid-cols-1">
-          {[
-            { num: "93%", label: "Hemat lebih besar", desc: "Rata-rata penghematan pengguna Ramean dibanding harga normal per bulan." },
-            { num: "10K+", label: "Pengguna aktif", desc: "Bergabung bersama puluhan ribu orang yang sudah beralih ke Ramean." },
-            { num: "< 1 Jam", label: "Aktivasi cepat", desc: "Dari pembayaran hingga akun aktif, selesai dalam hitungan menit." },
-          ].map((stat, i) => (
-            <div
-              key={i}
-              className={`pt-9 pr-10 ${i > 0 ? "border-l border-border pl-10 max-md:border-l-0 max-md:pl-0" : ""}`}
-            >
-              <div className="font-heading font-bold text-[56px] text-text leading-none mb-3">
-                {stat.num}
-              </div>
-              <div className="font-semibold font-heading text-base text-text mb-2">{stat.label}</div>
-              <p className="text-sm text-text-md leading-relaxed font-body">{stat.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* HOW IT WORKS */}
       <section className="max-w-[1240px] mx-auto px-10 py-20 border-t border-border">
         <SectionHeading
@@ -191,8 +122,8 @@ export default async function LandingPage() {
           <ImagePlaceholder minHeight={540} />
           <div className="flex flex-col gap-4">
             <StepCard label="Langkah 1" title="Pilih layanan yang kamu inginkan" desc="Jelajahi katalog kami dan temukan layanan yang paling sesuai. Netflix, Canva, Gemini, dan banyak lagi tersedia dengan harga jauh di bawah normal." ctaLabel="Lihat Katalog" active />
-            <StepCard label="Langkah 2" title="Lakukan pembayaran dengan mudah" desc="Pilih metode pembayaran favoritmu — QRIS, transfer bank, atau e-wallet. Proses aman dan terenkripsi penuh." ctaLabel="Bayar Sekarang" />
-            <StepCard label="Langkah 3" title="Akun langsung aktif, siap dipakai" desc="Terima detail akun premium aktif dalam hitungan menit. Pantau semua langgananmu di satu dashboard yang bersih." ctaLabel="Mulai Sekarang" />
+            <StepCard label="Langkah 2" title="Lakukan pembayaran dengan mudah" desc="Bayar bagianmu lewat Saldo Ramean. Dana ditahan di escrow sampai akses kamu terverifikasi, aman dari penipuan." ctaLabel="Bayar Sekarang" />
+            <StepCard label="Langkah 3" title="Akun langsung aktif, siap dipakai" desc="Terima detail akun premium di lobby grupmu dalam waktu singkat. Semua info grup dan anggota ada di satu tempat." ctaLabel="Mulai Sekarang" />
           </div>
         </div>
       </section>
@@ -217,10 +148,10 @@ export default async function LandingPage() {
           </div>
           <div className="relative">
             <div className="absolute left-[22px] top-11 bottom-5 w-px bg-border" />
-            <WhyItem num="01" title="Tanpa ikatan kontrak" desc="Tidak ada komitmen jangka panjang. Gunakan selama kamu mau, batalkan kapan saja tanpa denda." />
+            <WhyItem num="01" title="Tanpa ikatan tahunan" desc="Patungan dihitung per bulan. Tidak ada komitmen jangka panjang yang mengikat." />
             <WhyItem num="02" title="Bayar hanya yang kamu pakai" desc="Harga transparan, tidak ada biaya tersembunyi. Apa yang kamu lihat adalah yang kamu bayar." />
-            <WhyItem num="03" title="Satu dashboard untuk segalanya" desc="Kelola semua langgananmu di satu tempat. Tidak perlu ingat banyak password atau tanggal tagihan." />
-            <WhyItem num="04" title="Termin fleksibel sesuai kebutuhan" desc="Pilih durasi 1 bulan, 3 bulan, atau 1 tahun. Semakin lama, semakin besar penghematan kamu." />
+            <WhyItem num="03" title="Dilindungi escrow" desc="Dana kamu ditahan Ramean sampai akses terverifikasi, bukan transfer langsung ke orang asing. Aman dari penipuan." />
+            <WhyItem num="04" title="Grup selalu terjaga" desc="Kalau ada anggota keluar, Ramean carikan pengganti supaya patunganmu tetap berjalan." />
           </div>
         </div>
       </section>
@@ -249,19 +180,6 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="max-w-[1240px] mx-auto px-10 py-20 border-t border-border">
-        <SectionHeading
-          title="Cerita nyata dari pengguna kami"
-          desc="Bukan kata-kata kami, tapi pengalaman langsung orang-orang yang sudah merasakannya."
-        />
-        <div className="grid grid-cols-3 gap-6 max-md:grid-cols-1">
-          <TestimonialCard brandName="Netflix via Ramean" text={'"Tadinya berat bayar Netflix Rp54.000/bulan. Sekarang cuma Rp15.000 dan kualitasnya sama persis. Tidak ada yang hilang, semua fitur lengkap."'} name="Budi Santoso" role="Freelancer, Jakarta" />
-          <TestimonialCard brandName="Canva Pro via Ramean" text={'"Canva Pro dari Ramean benar-benar mengubah cara aku kerja. Hemat lebih dari Rp70.000 per bulan dan prosesnya cepat, dalam 30 menit akun sudah aktif."'} name="Siti Rahma" role="Desainer, Bandung" />
-          <TestimonialCard brandName="Gemini Advanced via Ramean" text={'"Satu dashboard untuk semua langganan itu sangat membantu. Aku tidak perlu ingat banyak tanggal tagihan lagi. Simple dan efisien."'} name="Ahmad Wijaya" role="Software Developer, Surabaya" />
-        </div>
-      </section>
-
       {/* PERSONAL SERVICE CTA */}
       <section className="max-w-[1240px] mx-auto px-10 pt-20 pb-[100px] border-t border-border">
         <div className="grid grid-cols-2 gap-20 items-center max-md:grid-cols-1 max-md:gap-10">
@@ -279,7 +197,7 @@ export default async function LandingPage() {
             </p>
             <Link href="/register">
               <Btn variant="primary" size="lg">
-                Hubungi Kami
+                Daftar Sekarang
               </Btn>
             </Link>
           </div>
