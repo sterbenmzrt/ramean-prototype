@@ -40,8 +40,10 @@ export default function ServiceGrid({ services, centered = false }) {
         </div>
       ) : (
         <div className="grid grid-cols-4 gap-5 max-lg:grid-cols-3 max-md:grid-cols-2">
-          {filtered.map((svc) => (
-            <ServiceCard key={svc.id} svc={svc} />
+          {filtered.map((svc, i) => (
+            <div key={svc.id} className="stagger-item" style={{ "--i": i }}>
+              <ServiceCard svc={svc} />
+            </div>
           ))}
         </div>
       )}
