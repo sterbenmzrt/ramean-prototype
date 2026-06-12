@@ -50,16 +50,16 @@ export default function TxnActions({ id, type, status }) {
           aria-modal="true"
           onClick={() => setConfirm(null)}
         >
-          <div className="bg-white rounded-2xl p-6 max-w-[380px] w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl p-6 max-w-[380px] w-full text-center" onClick={(e) => e.stopPropagation()}>
             <h3 className="font-heading font-bold text-lg text-text mb-2">
               {confirm === "release" ? "Rilis escrow?" : "Refund transaksi?"}
             </h3>
-            <p className="text-[13px] text-text-md font-body mb-6">
+            <p className="text-[13px] text-text-md font-body mb-6 leading-relaxed">
               {confirm === "release"
                 ? "Dana akan diteruskan & akses anggota dirilis. Tindakan ini tidak bisa dibatalkan."
                 : "Dana dikembalikan ke saldo user, keanggotaan dibatalkan, dan slot dibebaskan. Tidak bisa dibatalkan."}
             </p>
-            <div className="flex gap-2 justify-end">
+            <div className="flex gap-2 justify-center">
               <Btn variant="ghost" size="md" onClick={() => setConfirm(null)} disabled={busy}>
                 Batal
               </Btn>
