@@ -19,12 +19,12 @@ export default function LoginPage() {
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  // Hanya terima path internal relatif (anti open-redirect: tolak absolut & //host).
+  // Hanya path internal relatif: diawali "/" dan TIDAK diikuti "/" atau "\".
+  // Backslash dinormalkan browser jadi "/", sehingga "/\evil.com" -> "//evil.com"
+  // (protocol-relative) bisa lolos guard naif. Regex ini menutup keduanya.
   const rawCallback = searchParams.get("callbackUrl");
   const callbackUrl =
-    rawCallback && rawCallback.startsWith("/") && !rawCallback.startsWith("//")
-      ? rawCallback
-      : "/marketplace";
+    rawCallback && /^\/(?![/\\])/.test(rawCallback) ? rawCallback : "/marketplace";
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
