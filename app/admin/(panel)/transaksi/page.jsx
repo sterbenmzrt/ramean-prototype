@@ -18,7 +18,7 @@ const COLUMNS = [
 ];
 
 const TYPE_LABEL = { PAYMENT: "Pembayaran", TOPUP: "Top-up", REFUND: "Refund" };
-const STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn" };
+const STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn", REFUNDED: "muted" };
 const FILTERS = ["ALL", "HELD", "SUCCESS", "PENDING"];
 
 function label(t) {

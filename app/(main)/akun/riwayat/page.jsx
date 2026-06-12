@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 const TYPE_LABEL = { PAYMENT: "Pembayaran", TOPUP: "Top-up", REFUND: "Refund" };
 const TYPE_VARIANT = { PAYMENT: "primary", TOPUP: "yellow", REFUND: "green" };
-const STATUS_LABEL = { SUCCESS: "Berhasil", HELD: "Ditahan (escrow)", PENDING: "Menunggu" };
+const STATUS_LABEL = { SUCCESS: "Berhasil", HELD: "Ditahan (escrow)", PENDING: "Menunggu", REFUNDED: "Direfund" };
 
 function formatDate(d) {
   return new Date(d).toLocaleDateString("id-ID", {

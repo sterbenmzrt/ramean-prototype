@@ -10,7 +10,7 @@ import { UsersIcon, LayersIcon, TrendingUpIcon, LockIcon } from "@/components/ui
 export const dynamic = "force-dynamic";
 
 const TYPE_LABEL = { PAYMENT: "Pembayaran", TOPUP: "Top-up", REFUND: "Refund" };
-const STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn" };
+const STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn", REFUNDED: "muted" };
 
 function label(t) {
   return t.subscription

@@ -27,6 +27,9 @@ export async function POST(request) {
         }
       } else {
         if (!["HELD", "SUCCESS"].includes(t.status)) throw new Error("Transaksi ini tidak bisa direfund.");
+        // Idempotensi: tandai PAYMENT sumber agar tidak bisa direfund dua kali
+        // (mencegah saldo digelembungkan oleh refund berulang).
+        await tx.transaction.update({ where: { id }, data: { status: "REFUNDED" } });
         await tx.transaction.create({
           data: { userId: t.userId, subscriptionId: t.subscriptionId, amount: t.amount, type: "REFUND", status: "SUCCESS" },
         });

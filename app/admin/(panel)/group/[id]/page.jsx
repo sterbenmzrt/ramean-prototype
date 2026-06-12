@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 const GROUP_STATUS_VARIANT = { AVAILABLE: "green", FULL: "primary", INACTIVE: "warn" };
 const PAY_VARIANT = { PAID: "green", PENDING: "yellow" };
 const TYPE_LABEL = { PAYMENT: "Pembayaran", TOPUP: "Top-up", REFUND: "Refund" };
-const TXN_STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn" };
+const TXN_STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn", REFUNDED: "muted" };
 
 function formatDate(d) {
   return new Date(d).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });

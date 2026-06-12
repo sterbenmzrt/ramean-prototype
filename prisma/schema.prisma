@@ -73,7 +73,7 @@ model Transaction {
   subscriptionId String? // null untuk TOPUP yang tidak terkait subscription
   amount         Int
   type           String // PAYMENT | TOPUP | REFUND
-  status         String // SUCCESS | PENDING | HELD
+  status         String // SUCCESS | PENDING | HELD | REFUNDED (PAYMENT yang sudah direfund)
   createdAt      DateTime @default(now())
 
   user         User          @relation(fields: [userId], references: [id])
