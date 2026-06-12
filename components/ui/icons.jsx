@@ -65,12 +65,37 @@ export const LockIcon = (props) => (
   </svg>
 );
 
+export const CopyIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </svg>
+);
+
 export const ImageIcon = (props) => (
   <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#B0BCD0"
     strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
     <circle cx="8.5" cy="8.5" r="1.5" />
     <polyline points="21 15 16 10 5 21" />
+  </svg>
+);
+
+export const LayersIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+    <polyline points="2 17 12 22 22 17" />
+    <polyline points="2 12 12 17 22 12" />
+  </svg>
+);
+
+export const TrendingUpIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+    <polyline points="17 6 23 6 23 12" />
   </svg>
 );
 

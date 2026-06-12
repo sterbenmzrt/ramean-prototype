@@ -5,8 +5,8 @@ const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
-// logoUrl menunjuk ke /public/assets. Layanan tanpa aset (Spotify) memakai "" —
-// UI akan fallback ke inisial berwarna (anti broken-image, lihat DoD).
+// logoUrl menunjuk ke /public/assets. Layanan tanpa aset memakai "" — UI akan
+// fallback ke inisial berwarna (anti broken-image, lihat DoD).
 const SERVICES = [
   {
     name: "Netflix",
@@ -17,16 +17,6 @@ const SERVICES = [
     totalSlots: 6,
     description:
       "Nikmati ribuan film, series, dan dokumenter premium dari seluruh dunia kapan saja.",
-  },
-  {
-    name: "Spotify Premium",
-    category: "ENTERTAINMENT",
-    logoUrl: "",
-    originalPrice: 55000,
-    pricePerSlot: 14000,
-    totalSlots: 6,
-    description:
-      "Dengarkan musik tanpa iklan, kualitas tinggi, dan bisa diunduh untuk didengar offline.",
   },
   {
     name: "YouTube Premium",
@@ -70,17 +60,6 @@ const SERVICES = [
   },
 ];
 
-const MEMBER_NAMES = [
-  "Andi Rivaldo",
-  "Siti Maharani",
-  "Kevin Wijaya",
-  "Desi Ayu",
-  "Raihan Nugraha",
-  "Bella Kusuma",
-  "Hendra Saputra",
-  "Nina Pratiwi",
-];
-
 function monthsFromNow(n) {
   const d = new Date();
   d.setMonth(d.getMonth() + n);
@@ -119,18 +98,20 @@ async function main() {
     },
   });
 
-  // User dummy untuk mengisi anggota grup (tanpa password / tidak bisa login).
-  const members = [];
-  for (let i = 0; i < MEMBER_NAMES.length; i++) {
-    const name = MEMBER_NAMES[i];
-    const m = await prisma.user.create({
-      data: { name, email: `member${i + 1}@dummy.ramean.id` },
-    });
-    members.push(m);
-  }
+  // User admin (akses panel /admin).
+  await prisma.user.create({
+    data: {
+      name: "Admin Ramean",
+      email: "admin@ramean.id",
+      passwordHash: await bcrypt.hash("admin123", 10),
+      role: "ADMIN",
+      wallet: { create: { balance: 0 } },
+    },
+  });
 
   const renewal = monthsFromNow(1);
 
+  // Grup dibuat kosong (tanpa anggota seed) — slot siap diisi via alur join.
   for (const svc of SERVICES) {
     const service = await prisma.service.create({
       data: {
@@ -142,14 +123,12 @@ async function main() {
       },
     });
 
-    // Grup tersedia (mengumpulkan) — 2 anggota terisi.
-    const seatMembers = members.slice(0, 2);
-    const availGroup = await prisma.group.create({
+    await prisma.group.create({
       data: {
         serviceId: service.id,
         hostName: "Ramean Official",
         totalSlots: svc.totalSlots,
-        filledSlots: seatMembers.length,
+        filledSlots: 0,
         pricePerSlot: svc.pricePerSlot,
         renewalDate: renewal,
         status: "AVAILABLE",
@@ -157,51 +136,6 @@ async function main() {
           "Satu slot untuk satu pengguna. Dilarang mengubah password akun atau menambah perangkat di luar slotmu.",
       },
     });
-    for (const m of seatMembers) {
-      await prisma.groupMember.create({
-        data: { groupId: availGroup.id, userId: m.id, paymentStatus: "PAID", role: "MEMBER" },
-      });
-      await prisma.subscription.create({
-        data: {
-          userId: m.id,
-          groupId: availGroup.id,
-          status: "ACTIVE",
-          autoRenewal: true,
-          nextBillingDate: renewal,
-        },
-      });
-    }
-
-    // ChatGPT Plus: tambah satu grup PENUH untuk menguji edge case "grup penuh".
-    if (svc.name === "ChatGPT Plus") {
-      const fullMembers = members.slice(0, svc.totalSlots);
-      const fullGroup = await prisma.group.create({
-        data: {
-          serviceId: service.id,
-          hostName: "Ramean Official",
-          totalSlots: svc.totalSlots,
-          filledSlots: svc.totalSlots,
-          pricePerSlot: svc.pricePerSlot,
-          renewalDate: renewal,
-          status: "FULL",
-          rules: "Grup ini sudah penuh.",
-        },
-      });
-      for (const m of fullMembers) {
-        await prisma.groupMember.create({
-          data: { groupId: fullGroup.id, userId: m.id, paymentStatus: "PAID", role: "MEMBER" },
-        });
-        await prisma.subscription.create({
-          data: {
-            userId: m.id,
-            groupId: fullGroup.id,
-            status: "ACTIVE",
-            autoRenewal: true,
-            nextBillingDate: renewal,
-          },
-        });
-      }
-    }
   }
 
   const counts = {

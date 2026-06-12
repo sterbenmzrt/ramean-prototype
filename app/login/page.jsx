@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { signIn, getProviders } from "next-auth/react";
 import Link from "next/link";
 import RameanLogo from "@/components/ui/RameanLogo";
@@ -18,9 +18,13 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/marketplace";
+  // Hanya path internal relatif: diawali "/" dan TIDAK diikuti "/" atau "\".
+  // Backslash dinormalkan browser jadi "/", sehingga "/\evil.com" -> "//evil.com"
+  // (protocol-relative) bisa lolos guard naif. Regex ini menutup keduanya.
+  const rawCallback = searchParams.get("callbackUrl");
+  const callbackUrl =
+    rawCallback && /^\/(?![/\\])/.test(rawCallback) ? rawCallback : "/marketplace";
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
@@ -47,7 +51,10 @@ function LoginForm() {
       setLoading(false);
       return;
     }
-    router.push(callbackUrl);
+    // Hard navigation, bukan router.push: memastikan cookie sesi terkirim ke server
+    // sebelum halaman terproteksi (mis. checkout) di-render ulang. Tetap loading
+    // karena halaman akan berpindah.
+    window.location.assign(callbackUrl);
   }
 
   return (
