@@ -8,7 +8,7 @@ export const metadata = { title: "Admin — Ramean.id" };
 
 export default async function AdminLayout({ children }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) redirect("/login?callbackUrl=/admin");
+  if (!session?.user?.id) redirect("/admin/login");
   if (session.user.role !== "ADMIN") redirect("/");
 
   return (
