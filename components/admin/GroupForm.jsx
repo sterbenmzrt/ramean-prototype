@@ -54,7 +54,8 @@ export default function GroupForm({ mode, services = [], initial = null }) {
       setLoading(false);
       return;
     }
-    router.push("/admin/group");
+    // Menuju cockpit grup terkait (grup baru untuk create, grup ini untuk edit).
+    router.push(`/admin/group/${isEdit ? initial.id : data.id}`);
     router.refresh();
   }
 

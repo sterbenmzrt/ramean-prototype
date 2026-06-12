@@ -56,7 +56,7 @@ export default async function AdminGroupPage() {
             </Td>
             <Td align="right">
               <Link href={`/admin/group/${g.id}`}>
-                <Btn variant="outline" size="sm">Edit</Btn>
+                <Btn variant="outline" size="sm">Kelola</Btn>
               </Link>
             </Td>
           </tr>
