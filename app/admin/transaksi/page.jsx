@@ -3,8 +3,19 @@ import { getAdminTransactions } from "@/lib/admin";
 import Tag from "@/components/ui/Tag";
 import { fmt } from "@/lib/tokens";
 import TxnActions from "@/components/admin/TxnActions";
+import DataTable, { Td } from "@/components/admin/DataTable";
 
 export const dynamic = "force-dynamic";
+
+const COLUMNS = [
+  { key: "label", label: "Transaksi" },
+  { key: "user", label: "User" },
+  { key: "date", label: "Tanggal" },
+  { key: "type", label: "Tipe" },
+  { key: "status", label: "Status" },
+  { key: "amount", label: "Jumlah", align: "right" },
+  { key: "action", label: "", align: "right" },
+];
 
 const TYPE_LABEL = { PAYMENT: "Pembayaran", TOPUP: "Top-up", REFUND: "Refund" };
 const STATUS_VARIANT = { SUCCESS: "green", HELD: "yellow", PENDING: "warn" };
@@ -40,28 +51,33 @@ export default async function AdminTransaksiPage({ searchParams }) {
         ))}
       </div>
 
-      <div className="bg-white border border-border rounded-xl divide-y divide-border-lt">
-        {txns.length === 0 ? (
-          <div className="p-8 text-center text-text-md font-body text-sm">Tidak ada transaksi.</div>
-        ) : (
-          txns.map((t) => (
-            <div key={t.id} className="flex items-center gap-4 px-5 py-3.5 max-md:flex-wrap">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-semibold text-text font-body">{label(t)}</span>
-                  <Tag variant={t.type === "REFUND" ? "primary" : "green"}>{TYPE_LABEL[t.type] || t.type}</Tag>
-                  <Tag variant={STATUS_VARIANT[t.status] || "primary"}>{t.status}</Tag>
-                </div>
-                <div className="text-xs text-text-md font-body mt-0.5">
-                  {t.user.name} · {t.user.email} · {formatDate(t.createdAt)}
-                </div>
+      <DataTable
+        columns={COLUMNS}
+        rows={txns}
+        empty="Tidak ada transaksi."
+        renderRow={(t) => (
+          <tr key={t.id}>
+            <Td className="font-semibold whitespace-nowrap">{label(t)}</Td>
+            <Td>
+              <div className="text-sm text-text">{t.user.name}</div>
+              <div className="text-xs text-text-md">{t.user.email}</div>
+            </Td>
+            <Td className="whitespace-nowrap text-text-md text-[13px]">{formatDate(t.createdAt)}</Td>
+            <Td>
+              <Tag variant={t.type === "REFUND" ? "primary" : "green"}>{TYPE_LABEL[t.type] || t.type}</Tag>
+            </Td>
+            <Td>
+              <Tag variant={STATUS_VARIANT[t.status] || "primary"}>{t.status}</Tag>
+            </Td>
+            <Td align="right" className="font-heading font-bold whitespace-nowrap">{fmt(t.amount)}</Td>
+            <Td align="right">
+              <div className="flex justify-end">
+                <TxnActions id={t.id} type={t.type} status={t.status} />
               </div>
-              <div className="font-heading font-bold text-sm text-text whitespace-nowrap">{fmt(t.amount)}</div>
-              <TxnActions id={t.id} type={t.type} status={t.status} />
-            </div>
-          ))
+            </Td>
+          </tr>
         )}
-      </div>
+      />
     </div>
   );
 }

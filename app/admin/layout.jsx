@@ -16,7 +16,15 @@ export default async function AdminLayout({ children }) {
       <aside className="w-[230px] bg-primary p-4 flex flex-col shrink-0 max-md:w-full">
         <AdminSidebar />
       </aside>
-      <main className="flex-1 min-w-0 p-8 max-md:p-5">{children}</main>
+      <div className="flex-1 min-w-0 flex flex-col">
+        <header className="h-14 shrink-0 border-b border-border bg-white flex items-center justify-between px-8 max-md:px-5">
+          <span className="font-heading font-bold text-sm text-text">Panel Admin</span>
+          <span className="text-xs text-text-md font-body truncate max-w-[55%]">
+            {session.user.email}
+          </span>
+        </header>
+        <main className="flex-1 min-w-0 p-8 max-md:p-5">{children}</main>
+      </div>
     </div>
   );
 }

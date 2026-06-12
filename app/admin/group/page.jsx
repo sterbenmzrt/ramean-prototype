@@ -4,10 +4,20 @@ import SvcIcon from "@/components/ui/SvcIcon";
 import Tag from "@/components/ui/Tag";
 import Btn from "@/components/ui/Btn";
 import { fmt } from "@/lib/tokens";
+import DataTable, { Td } from "@/components/admin/DataTable";
 
 export const dynamic = "force-dynamic";
 
 const STATUS_VARIANT = { AVAILABLE: "green", FULL: "primary", INACTIVE: "warn" };
+
+const COLUMNS = [
+  { key: "grup", label: "Grup" },
+  { key: "price", label: "Harga/slot" },
+  { key: "slot", label: "Slot" },
+  { key: "renewal", label: "Renewal" },
+  { key: "status", label: "Status" },
+  { key: "action", label: "", align: "right" },
+];
 
 function formatDate(d) {
   return new Date(d).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
@@ -24,29 +34,34 @@ export default async function AdminGroupPage() {
         </Link>
       </div>
 
-      <div className="bg-white border border-border rounded-xl divide-y divide-border-lt">
-        {groups.length === 0 ? (
-          <div className="p-8 text-center text-text-md font-body text-sm">Belum ada grup.</div>
-        ) : (
-          groups.map((g) => (
-            <div key={g.id} className="flex items-center gap-4 px-5 py-3.5 max-md:flex-wrap">
-              <SvcIcon name={g.service.name} logoUrl={g.service.logoUrl} size={36} />
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold text-sm text-text font-body">
+      <DataTable
+        columns={COLUMNS}
+        rows={groups}
+        empty="Belum ada grup."
+        renderRow={(g) => (
+          <tr key={g.id}>
+            <Td>
+              <div className="flex items-center gap-3">
+                <SvcIcon name={g.service.name} logoUrl={g.service.logoUrl} size={32} />
+                <span className="font-semibold whitespace-nowrap">
                   {g.service.name} — Grup {g.id.slice(-4).toUpperCase()}
-                </div>
-                <div className="text-xs text-text-md font-body mt-0.5">
-                  {fmt(g.pricePerSlot)}/slot · {g.filledSlots}/{g.totalSlots} · {formatDate(g.renewalDate)}
-                </div>
+                </span>
               </div>
+            </Td>
+            <Td className="whitespace-nowrap text-text-md text-[13px]">{fmt(g.pricePerSlot)}/slot</Td>
+            <Td className="whitespace-nowrap text-text-md text-[13px]">{g.filledSlots}/{g.totalSlots}</Td>
+            <Td className="whitespace-nowrap text-text-md text-[13px]">{formatDate(g.renewalDate)}</Td>
+            <Td>
               <Tag variant={STATUS_VARIANT[g.status] || "primary"}>{g.status}</Tag>
+            </Td>
+            <Td align="right">
               <Link href={`/admin/group/${g.id}`}>
                 <Btn variant="outline" size="sm">Edit</Btn>
               </Link>
-            </div>
-          ))
+            </Td>
+          </tr>
         )}
-      </div>
+      />
     </div>
   );
 }
