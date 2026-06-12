@@ -21,6 +21,8 @@ const patchSchema = z.object({
   rules: z.string().optional().default(""),
 });
 
+const deleteSchema = z.object({ id: z.string().min(1) });
+
 export async function POST(request) {
   if (!(await requireAdmin())) return NextResponse.json({ error: "Akses ditolak." }, { status: 403 });
   const p = createSchema.safeParse(await request.json().catch(() => null));
@@ -64,5 +66,28 @@ export async function PATCH(request) {
       rules: d.rules || null,
     },
   });
+  return NextResponse.json({ ok: true });
+}
+
+export async function DELETE(request) {
+  if (!(await requireAdmin())) return NextResponse.json({ error: "Akses ditolak." }, { status: 403 });
+  const p = deleteSchema.safeParse(await request.json().catch(() => null));
+  if (!p.success) return NextResponse.json({ error: "Input tidak valid." }, { status: 400 });
+
+  const group = await prisma.group.findUnique({
+    where: { id: p.data.id },
+    include: { _count: { select: { members: true, subscriptions: true } } },
+  });
+  if (!group) return NextResponse.json({ error: "Grup tidak ditemukan." }, { status: 404 });
+
+  // Lindungi audit trail: hanya grup tanpa jejak (anggota & subscription) boleh dihapus.
+  if (group._count.members > 0 || group._count.subscriptions > 0) {
+    return NextResponse.json(
+      { error: "Grup punya anggota/riwayat. Keluarkan anggota dulu atau set INACTIVE." },
+      { status: 400 }
+    );
+  }
+
+  await prisma.group.delete({ where: { id: p.data.id } });
   return NextResponse.json({ ok: true });
 }
