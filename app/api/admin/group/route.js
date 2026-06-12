@@ -88,6 +88,10 @@ export async function DELETE(request) {
     );
   }
 
-  await prisma.group.delete({ where: { id: p.data.id } });
+  // Hapus kredensial (FK) lalu grup, atomik.
+  await prisma.$transaction([
+    prisma.groupCredential.deleteMany({ where: { groupId: p.data.id } }),
+    prisma.group.delete({ where: { id: p.data.id } }),
+  ]);
   return NextResponse.json({ ok: true });
 }
