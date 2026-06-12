@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 const NAV = [
+  ["/admin", "Dashboard"],
   ["/admin/group", "Group"],
   ["/admin/transaksi", "Transaksi"],
   ["/admin/service", "Service"],
@@ -22,7 +23,10 @@ export default function AdminSidebar() {
         <div className="font-heading font-extrabold text-white text-lg">Ramean Admin</div>
       </div>
       {NAV.map(([href, label]) => {
-        const active = pathname === href || pathname.startsWith(href + "/");
+        // "/admin" (dashboard) hanya aktif saat exact match, agar tidak menyala
+        // di semua subrute admin. Item lain aktif untuk dirinya + subrutenya.
+        const active =
+          href === "/admin" ? pathname === "/admin" : pathname === href || pathname.startsWith(href + "/");
         return (
           <Link
             key={href}
