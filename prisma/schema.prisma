@@ -51,6 +51,19 @@ model Group {
   service       Service        @relation(fields: [serviceId], references: [id])
   subscriptions Subscription[]
   members       GroupMember[]
+  credential    GroupCredential?
+}
+
+model GroupCredential {
+  id         String   @id @default(cuid())
+  groupId    String   @unique
+  ciphertext Bytes
+  iv         Bytes
+  authTag    Bytes
+  keyVersion Int      @default(1)
+  updatedAt  DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id])
 }
 
 model Subscription {
