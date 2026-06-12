@@ -3,9 +3,11 @@ import { redirect, notFound } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getGroupLobby } from "@/lib/data";
+import { getGroupCredentialForMember } from "@/lib/credential";
 import SvcIcon from "@/components/ui/SvcIcon";
 import Btn from "@/components/ui/Btn";
 import Tag from "@/components/ui/Tag";
+import CredentialReveal from "@/components/account/CredentialReveal";
 import { CheckIcon, ShieldIcon, LockIcon } from "@/components/ui/icons";
 import { fmt } from "@/lib/tokens";
 import { obfuscateName, initials } from "@/lib/util";
@@ -34,6 +36,7 @@ export default async function LobbyPage({ params }) {
   const myId = session.user.id;
   const isMember = group.members.some((m) => m.user.id === myId);
   const svc = group.service;
+  const { state: credState, credential } = await getGroupCredentialForMember(groupId, myId);
 
   return (
     <div className="bg-bg min-h-screen">
@@ -122,19 +125,40 @@ export default async function LobbyPage({ params }) {
             </div>
           </div>
 
-          {/* Akses kredensial (placeholder — fitur penuh di iterasi berikut) */}
+          {/* Akses kredensial — terlihat hanya untuk anggota yang aksesnya sudah dirilis */}
           <div className="bg-white border border-border rounded-xl p-6">
             <div className="flex items-center gap-2 mb-2 text-text-md">
               <LockIcon width={18} height={18} />
               <h2 className="font-heading font-bold text-base text-text m-0">Akses Akun</h2>
             </div>
-            <p className="text-[13px] text-text-md font-body leading-relaxed mb-4">
-              Kredensial akun dienkripsi dan dirilis setelah escrow terverifikasi. Pada demo MVP,
-              detail akun dikirim oleh Ramean dalam 1 jam.
-            </p>
-            <Btn variant="muted" size="md" disabled>
-              Kredensial menyusul (1 jam)
-            </Btn>
+
+            {credState === "ready" ? (
+              <>
+                <p className="text-[13px] text-text-md font-body leading-relaxed mb-4">
+                  Gunakan kredensial di bawah untuk login. Jangan ubah password akun atau
+                  menambah perangkat di luar slotmu.
+                </p>
+                <CredentialReveal credential={credential} />
+              </>
+            ) : credState === "not_ready" ? (
+              <p className="text-[13px] text-text-md font-body leading-relaxed">
+                Aksesmu sudah dirilis. Kredensial sedang disiapkan oleh Ramean dan akan
+                muncul di sini sebentar lagi.
+              </p>
+            ) : credState === "pending" ? (
+              <p className="text-[13px] text-text-md font-body leading-relaxed">
+                Kredensial akan muncul di sini setelah pembayaranmu diverifikasi dan akses
+                dirilis dari escrow oleh Ramean.
+              </p>
+            ) : credState === "unavailable" ? (
+              <p className="text-[13px] text-err font-body leading-relaxed">
+                Kredensial tidak tersedia saat ini. Silakan hubungi dukungan Ramean.
+              </p>
+            ) : (
+              <p className="text-[13px] text-text-md font-body leading-relaxed">
+                Bergabunglah ke grup ini untuk mendapatkan akses akun.
+              </p>
+            )}
           </div>
         </div>
 
