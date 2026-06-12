@@ -5,8 +5,8 @@ const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
-// logoUrl menunjuk ke /public/assets. Layanan tanpa aset (Spotify) memakai "" —
-// UI akan fallback ke inisial berwarna (anti broken-image, lihat DoD).
+// logoUrl menunjuk ke /public/assets. Layanan tanpa aset memakai "" — UI akan
+// fallback ke inisial berwarna (anti broken-image, lihat DoD).
 const SERVICES = [
   {
     name: "Netflix",
@@ -17,16 +17,6 @@ const SERVICES = [
     totalSlots: 6,
     description:
       "Nikmati ribuan film, series, dan dokumenter premium dari seluruh dunia kapan saja.",
-  },
-  {
-    name: "Spotify Premium",
-    category: "ENTERTAINMENT",
-    logoUrl: "",
-    originalPrice: 55000,
-    pricePerSlot: 14000,
-    totalSlots: 6,
-    description:
-      "Dengarkan musik tanpa iklan, kualitas tinggi, dan bisa diunduh untuk didengar offline.",
   },
   {
     name: "YouTube Premium",
