@@ -8,6 +8,7 @@ import DataTable, { Td } from "@/components/admin/DataTable";
 import TxnActions from "@/components/admin/TxnActions";
 import RemoveMemberButton from "@/components/admin/RemoveMemberButton";
 import DeleteGroupButton from "@/components/admin/DeleteGroupButton";
+import CredentialForm from "@/components/admin/CredentialForm";
 import { fmt } from "@/lib/tokens";
 
 export const dynamic = "force-dynamic";
@@ -38,7 +39,7 @@ const TXN_COLUMNS = [
 export default async function GroupCockpitPage({ params }) {
   const data = await getGroupDetail(params.id);
   if (!data) notFound();
-  const { group, transactions, paymentByUser, deletable } = data;
+  const { group, transactions, paymentByUser, deletable, credentialMeta } = data;
   const svc = group.service;
 
   return (
@@ -81,6 +82,11 @@ export default async function GroupCockpitPage({ params }) {
           </p>
         )}
       </div>
+
+      {/* Kredensial akun */}
+      <section className="mb-8">
+        <CredentialForm groupId={group.id} meta={credentialMeta} />
+      </section>
 
       {/* Roster anggota */}
       <section className="mb-8">
