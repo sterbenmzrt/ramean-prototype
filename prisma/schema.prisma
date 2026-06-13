@@ -18,6 +18,7 @@ model User {
   passwordHash String? // null untuk akun yang dibuat via Google OAuth
   image        String?
   createdAt    DateTime @default(now())
+  role         String   @default("USER") // USER | ADMIN
 
   wallet        Wallet?
   subscriptions Subscription[]
@@ -50,6 +51,19 @@ model Group {
   service       Service        @relation(fields: [serviceId], references: [id])
   subscriptions Subscription[]
   members       GroupMember[]
+  credential    GroupCredential?
+}
+
+model GroupCredential {
+  id         String   @id @default(cuid())
+  groupId    String   @unique
+  ciphertext Bytes
+  iv         Bytes
+  authTag    Bytes
+  keyVersion Int      @default(1)
+  updatedAt  DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id])
 }
 
 model Subscription {
@@ -72,7 +86,7 @@ model Transaction {
   subscriptionId String? // null untuk TOPUP yang tidak terkait subscription
   amount         Int
   type           String // PAYMENT | TOPUP | REFUND
-  status         String // SUCCESS | PENDING | HELD
+  status         String // SUCCESS | PENDING | HELD | REFUNDED (PAYMENT yang sudah direfund)
   createdAt      DateTime @default(now())
 
   user         User          @relation(fields: [userId], references: [id])
