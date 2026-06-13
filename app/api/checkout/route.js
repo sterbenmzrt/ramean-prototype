@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
+import { z } from "zod";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { ADMIN_FEE } from "@/lib/constants";
+
+const checkoutSchema = z.object({
+  groupId: z.string().min(1, "Grup tidak ditentukan."),
+  // Hanya metode yang dikenal UI. Selain "saldo" bersifat simulasi (mock payment).
+  method: z.enum(["saldo", "qris", "bca", "gopay"]).default("saldo"),
+});
 
 export async function POST(request) {
   const session = await getServerSession(authOptions);
@@ -11,16 +18,12 @@ export async function POST(request) {
   }
   const userId = session.user.id;
 
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Body tidak valid" }, { status: 400 });
+  const parsed = checkoutSchema.safeParse(await request.json().catch(() => null));
+  if (!parsed.success) {
+    const msg = parsed.error.issues[0]?.message || "Input tidak valid.";
+    return NextResponse.json({ error: msg }, { status: 400 });
   }
-  const { groupId, method } = body || {};
-  if (!groupId) {
-    return NextResponse.json({ error: "Grup tidak ditentukan." }, { status: 400 });
-  }
+  const { groupId, method } = parsed.data;
 
   try {
     const result = await prisma.$transaction(async (tx) => {
