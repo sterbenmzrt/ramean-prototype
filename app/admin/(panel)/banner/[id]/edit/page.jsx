@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import BannerForm from "@/components/admin/BannerForm";
+import { isUploadEnabled } from "@/lib/upload";
 import { ArrowLeftIcon } from "@/components/ui/icons";
 
 export const dynamic = "force-dynamic";
@@ -28,7 +29,7 @@ export default async function EditBannerPage({ params }) {
         <ArrowLeftIcon width={15} height={15} /> Kembali ke daftar
       </Link>
       <h1 className="font-heading font-bold text-2xl text-text mb-6">Edit Banner</h1>
-      <BannerForm mode="edit" initial={initial} />
+      <BannerForm mode="edit" initial={initial} uploadEnabled={isUploadEnabled()} />
     </div>
   );
 }
