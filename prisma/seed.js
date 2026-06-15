@@ -7,9 +7,9 @@ const path = require("path");
 
 const prisma = new PrismaClient();
 
-// Baca gambar banner yang tersedia di public/uploads/banners (lokal). Di lingkungan
-// tanpa file (mis. prod/CI), kembalikan [] → seed pakai banner fallback gradient.
-const BANNER_DIR = path.join(__dirname, "..", "public", "uploads", "banners");
+// Baca gambar banner dari public/assets/banners (di-commit → ikut ter-deploy ke prod).
+// Bila folder kosong, kembalikan [] → seed pakai banner fallback gradient.
+const BANNER_DIR = path.join(__dirname, "..", "public", "assets", "banners");
 const IMG_RE = /\.(jpe?g|png|webp)$/i;
 
 function readBannerFiles() {
@@ -173,7 +173,7 @@ async function main() {
         ctaHref: "/marketplace",
         order: i,
         active: true,
-        imagePath: `/uploads/banners/${file}`,
+        imagePath: `/assets/banners/${file}`,
       })),
     });
   } else {
