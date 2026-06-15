@@ -4,7 +4,7 @@ import PromoCarousel from "@/components/marketing/PromoCarousel";
 import ServiceGrid from "@/components/marketplace/ServiceGrid";
 import Btn from "@/components/ui/Btn";
 import Reveal from "@/components/ui/Reveal";
-import { ImageIcon } from "@/components/ui/icons";
+import HomeImage from "@/components/marketing/HomeImage";
 
 export const dynamic = "force-dynamic";
 
@@ -29,17 +29,6 @@ function SectionHeading({ tagline, title, desc, align = "left" }) {
           {desc}
         </p>
       )}
-    </div>
-  );
-}
-
-function ImagePlaceholder({ minHeight = 400 }) {
-  return (
-    <div
-      className="w-full bg-[#E8EDF5] flex items-center justify-center rounded"
-      style={{ minHeight }}
-    >
-      <ImageIcon width={48} height={48} />
     </div>
   );
 }
@@ -110,7 +99,7 @@ export default async function LandingPage() {
             </Link>
           </div>
         </div>
-        <ImagePlaceholder minHeight={480} />
+        <HomeImage src="/assets/home/hero.jpg" alt="Ilustrasi patungan langganan Ramean" minHeight={480} />
       </section>
 
       {/* HOW IT WORKS */}
@@ -123,7 +112,7 @@ export default async function LandingPage() {
           align="center"
         />
         <div className="grid grid-cols-2 gap-10 mt-10 max-md:grid-cols-1">
-          <ImagePlaceholder minHeight={540} />
+          <HomeImage src="/assets/home/cara-kerja.jpg" alt="Ilustrasi langkah memakai Ramean" minHeight={540} />
           <div className="flex flex-col gap-4">
             <StepCard label="Langkah 1" title="Pilih layanan yang kamu inginkan" desc="Jelajahi katalog kami dan temukan layanan yang paling sesuai. Netflix, Canva, Gemini, dan banyak lagi tersedia dengan harga jauh di bawah normal." ctaLabel="Lihat Katalog" active />
             <StepCard label="Langkah 2" title="Lakukan pembayaran dengan mudah" desc="Bayar bagianmu lewat Saldo Ramean. Dana ditahan di escrow sampai akses kamu terverifikasi, aman dari penipuan." ctaLabel="Bayar Sekarang" />
@@ -211,7 +200,7 @@ export default async function LandingPage() {
               </Btn>
             </Link>
           </div>
-          <ImagePlaceholder minHeight={440} />
+          <HomeImage src="/assets/home/akun-pribadi.jpg" alt="Ilustrasi akun pribadi" minHeight={440} />
         </div>
       </section>
       </Reveal>
