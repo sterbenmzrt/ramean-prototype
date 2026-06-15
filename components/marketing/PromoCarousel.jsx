@@ -15,18 +15,24 @@ function reducedMotion() {
 }
 
 // Satu slide: gambar penuh (klik → ctaHref) atau fallback gradient + judul.
+// Slide non-aktif diredupkan, dikecilkan, dan diberi scrim agar "mundur" ke belakang
+// (efek peek/highlight ala Steam featured).
 function Slide({ banner, active, errored, onError }) {
   const inner = (
     <div
-      className={`relative rounded-2xl overflow-hidden aspect-[1448/520] bg-gradient-to-br from-primary to-[#15315f] shadow-sm transition-[opacity,transform] duration-500 ${
-        active ? "opacity-100 scale-100" : "opacity-45 scale-[0.94]"
+      className={`relative rounded-2xl overflow-hidden aspect-[1448/520] bg-gradient-to-br from-primary to-[#15315f] transition-all duration-700 ease-out ${
+        active
+          ? "opacity-100 scale-100 shadow-[0_16px_48px_rgba(3,52,110,0.28)]"
+          : "opacity-60 scale-[0.9]"
       }`}
     >
       {banner.imagePath && !errored ? (
         <img
           src={banner.imagePath}
           alt={banner.title || ""}
-          className="w-full h-full object-cover"
+          className={`w-full h-full object-cover transition-transform duration-[7000ms] ease-out ${
+            active ? "scale-105" : "scale-100"
+          }`}
           onError={onError}
         />
       ) : (
@@ -36,6 +42,14 @@ function Slide({ banner, active, errored, onError }) {
           </span>
         </div>
       )}
+
+      {/* Scrim: pertegas slide aktif vs tetangga */}
+      <div
+        className={`absolute inset-0 bg-primary/30 transition-opacity duration-700 ${
+          active ? "opacity-0" : "opacity-100"
+        }`}
+        aria-hidden="true"
+      />
     </div>
   );
 
@@ -67,30 +81,30 @@ export default function PromoCarousel({ banners = [] }) {
   if (count === 0) return null;
 
   // Lebar tiap slide (% dari container) + offset agar slide aktif di tengah dengan
-  // tetangga "mengintip" di sisi (gaya Steam featured / lapakgaming).
-  const slideW = single ? 100 : 84;
+  // tetangga "mengintip" cukup lebar di kedua sisi (gaya Steam featured).
+  const slideW = single ? 100 : 74;
   const peek = (100 - slideW) / 2;
 
   return (
     <section
       aria-roledescription="carousel"
       aria-label="Promosi Ramean"
-      className="w-full bg-bg py-7"
+      className="w-full bg-bg py-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <div className="max-w-[1280px] mx-auto px-4 relative">
-        <div className="overflow-hidden">
+      <div className="max-w-[1320px] mx-auto px-4 relative">
+        <div className="overflow-hidden py-2">
           <div
-            className="flex transition-transform duration-500 ease-out"
+            className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{ transform: `translateX(calc(${peek}% - ${idx * slideW}%))` }}
           >
             {banners.map((b, i) => (
               <div
                 key={b.id}
-                className="shrink-0 px-2"
+                className="shrink-0 px-3"
                 style={{ width: `${slideW}%` }}
                 aria-hidden={i !== idx}
               >
@@ -111,7 +125,7 @@ export default function PromoCarousel({ banners = [] }) {
               type="button"
               onClick={() => go(idx - 1)}
               aria-label="Slide sebelumnya"
-              className="absolute left-6 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white border border-border shadow-md text-primary hover:bg-bg max-md:left-2"
+              className="absolute left-7 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white border border-border shadow-md text-primary hover:bg-bg transition-colors max-md:left-1"
             >
               <ArrowLeftIcon />
             </button>
@@ -119,12 +133,12 @@ export default function PromoCarousel({ banners = [] }) {
               type="button"
               onClick={() => go(idx + 1)}
               aria-label="Slide berikutnya"
-              className="absolute right-6 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white border border-border shadow-md text-primary hover:bg-bg max-md:right-2"
+              className="absolute right-7 top-1/2 -translate-y-1/2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white border border-border shadow-md text-primary hover:bg-bg transition-colors max-md:right-1"
             >
               <ArrowRightIcon />
             </button>
 
-            <div className="flex items-center justify-center gap-1 mt-4">
+            <div className="flex items-center justify-center gap-1 mt-5">
               {banners.map((_, i) => (
                 <button
                   key={i}
@@ -135,8 +149,8 @@ export default function PromoCarousel({ banners = [] }) {
                   className="min-w-[44px] min-h-[44px] flex items-center justify-center"
                 >
                   <span
-                    className={`block h-2 rounded-full transition-all ${
-                      i === idx ? "w-6 bg-primary" : "w-2 bg-border"
+                    className={`block h-2 rounded-full transition-all duration-300 ${
+                      i === idx ? "w-7 bg-primary" : "w-2 bg-border"
                     }`}
                   />
                 </button>
