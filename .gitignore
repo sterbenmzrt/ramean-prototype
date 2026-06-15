@@ -25,6 +25,10 @@ wireframe/
 # brainstorm visual companion
 .superpowers/
 
+# upload banner (runtime, ephemeral di Netlify)
+/public/uploads/banners/*
+!/public/uploads/banners/.gitkeep
+
 # misc
 .DS_Store
 *.pem
