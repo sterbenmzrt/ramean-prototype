@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 // Isolasi antar test: kosongkan semua tabel dalam urutan aman-FK sebelum tiap test.
 beforeEach(async () => {
+  await prisma.banner.deleteMany();
   await prisma.transaction.deleteMany();
   await prisma.groupCredential.deleteMany();
   await prisma.subscription.deleteMany();
