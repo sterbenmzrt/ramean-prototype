@@ -2,8 +2,32 @@
 // Jalankan: npm run db:seed  (atau otomatis lewat `prisma migrate reset`).
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const path = require("path");
 
 const prisma = new PrismaClient();
+
+// Baca gambar banner dari public/assets/banners (di-commit → ikut ter-deploy ke prod).
+// Bila folder kosong, kembalikan [] → seed pakai banner fallback gradient.
+const BANNER_DIR = path.join(__dirname, "..", "public", "assets", "banners");
+const IMG_RE = /\.(jpe?g|png|webp)$/i;
+
+function readBannerFiles() {
+  try {
+    return fs.readdirSync(BANNER_DIR).filter((f) => IMG_RE.test(f)).sort();
+  } catch {
+    return [];
+  }
+}
+
+const PROMO_TITLES = [
+  "Hemat sampai 70% untuk langganan favoritmu",
+  "Dana aman dengan escrow Ramean",
+  "Patungan praktis tanpa ribet",
+  "Akses layanan premium harga bersahabat",
+  "Satu platform untuk semua langgananmu",
+  "Gabung grup, langsung pakai hari ini",
+];
 
 // logoUrl menunjuk ke /public/assets. Layanan tanpa aset memakai "" — UI akan
 // fallback ke inisial berwarna (anti broken-image, lihat DoD).
@@ -138,10 +162,52 @@ async function main() {
     });
   }
 
+  // Banner promo: pakai gambar di public/uploads/banners bila ada (lokal),
+  // selain itu fallback gradient + judul (imagePath "") agar prod/CI tetap berisi.
+  const bannerFiles = readBannerFiles();
+  if (bannerFiles.length > 0) {
+    await prisma.banner.createMany({
+      data: bannerFiles.map((file, i) => ({
+        title: PROMO_TITLES[i % PROMO_TITLES.length],
+        ctaLabel: "Lihat Layanan",
+        ctaHref: "/marketplace",
+        order: i,
+        active: true,
+        imagePath: `/assets/banners/${file}`,
+      })),
+    });
+  } else {
+    await prisma.banner.createMany({
+      data: [
+        {
+          title: "Hemat sampai 70% untuk langganan favoritmu",
+          subtitle:
+            "Gabung grup patungan Netflix, ChatGPT Plus, dan lainnya — bayar cukup bagianmu.",
+          ctaLabel: "Lihat Layanan",
+          ctaHref: "/marketplace",
+          order: 0,
+          active: true,
+          imagePath: "",
+        },
+        {
+          title: "Dana aman dengan escrow Ramean",
+          subtitle:
+            "Pembayaranmu ditahan sampai akses akun terverifikasi. Bebas dari penipuan.",
+          ctaLabel: "Mulai Gratis",
+          ctaHref: "/register",
+          order: 1,
+          active: true,
+          imagePath: "",
+        },
+      ],
+    });
+  }
+
   const counts = {
     users: await prisma.user.count(),
     services: await prisma.service.count(),
     groups: await prisma.group.count(),
+    banners: await prisma.banner.count(),
   };
   console.log("Seed selesai:", counts);
   console.log("Login demo: demo@ramean.id / password123 (saldo Rp50.000)");
