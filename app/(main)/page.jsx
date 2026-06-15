@@ -140,6 +140,13 @@ export default async function LandingPage() {
                 Jelajahi Sekarang
               </Btn>
             </Link>
+            <div className="mt-10">
+              <HomeImage
+                src="/assets/home/kenapa-ramean.jpg"
+                alt="Ilustrasi keunggulan Ramean"
+                minHeight={300}
+              />
+            </div>
           </div>
           <div className="relative">
             <div className="absolute left-[22px] top-11 bottom-5 w-px bg-border" />
