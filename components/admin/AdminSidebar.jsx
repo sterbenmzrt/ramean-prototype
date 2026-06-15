@@ -9,6 +9,7 @@ const NAV = [
   ["/admin/group", "Group"],
   ["/admin/transaksi", "Transaksi"],
   ["/admin/service", "Service"],
+  ["/admin/banner", "Banner"],
   ["/admin/user", "User"],
 ];
 

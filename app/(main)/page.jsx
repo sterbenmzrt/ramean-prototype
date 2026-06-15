@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getServiceCards } from "@/lib/data";
+import { getServiceCards, getActiveBanners } from "@/lib/data";
+import PromoCarousel from "@/components/marketing/PromoCarousel";
 import ServiceGrid from "@/components/marketplace/ServiceGrid";
 import Btn from "@/components/ui/Btn";
 import Reveal from "@/components/ui/Reveal";
@@ -80,10 +81,11 @@ function WhyItem({ num, title, desc }) {
 
 // ── Landing page ───────────────────────────────────────────────────────────
 export default async function LandingPage() {
-  const services = await getServiceCards();
+  const [services, banners] = await Promise.all([getServiceCards(), getActiveBanners()]);
 
   return (
     <div className="bg-bg">
+      {banners.length > 0 && <PromoCarousel banners={banners} />}
       {/* HERO */}
       <section className="max-w-[1240px] mx-auto px-10 py-20 grid grid-cols-2 gap-16 items-center max-md:grid-cols-1">
         <div>
