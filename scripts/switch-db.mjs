@@ -1,14 +1,20 @@
-// Mengganti provider datasource Prisma ke PostgreSQL ketika DB_PROVIDER=postgresql.
-// Dipakai di build Vercel (set DB_PROVIDER=postgresql di env Vercel) agar produksi
-// memakai Supabase Postgres, sementara lokal tetap SQLite (tanpa env ini = no-op).
+// Mengganti provider datasource Prisma ke PostgreSQL untuk produksi (mis. Vercel),
+// sementara lokal tetap SQLite. Pemicunya: DATABASE_URL berupa Postgres ATAU
+// DB_PROVIDER=postgresql. Lokal (DATABASE_URL `file:` / kosong) = no-op.
 //
-// Perubahan hanya pada file schema di mesin build (ephemeral), tidak perlu di-commit.
+// Dijalankan di `postinstall` (pasti jalan saat `npm install` di Vercel) sehingga
+// tidak bergantung pada buildCommand. Perubahan schema bersifat ephemeral di mesin
+// build, tidak perlu di-commit.
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-if (process.env.DB_PROVIDER !== "postgresql") {
-  console.log("[switch-db] DB_PROVIDER bukan 'postgresql' → schema dibiarkan (SQLite).");
+const dbUrl = process.env.DATABASE_URL || "";
+const isPostgresUrl = /^postgres(ql)?:\/\//i.test(dbUrl);
+const wantPostgres = process.env.DB_PROVIDER === "postgresql" || isPostgresUrl;
+
+if (!wantPostgres) {
+  console.log("[switch-db] DATABASE_URL bukan Postgres → schema dibiarkan (SQLite).");
   process.exit(0);
 }
 
