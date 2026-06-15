@@ -138,10 +138,37 @@ async function main() {
     });
   }
 
+  // Banner promo contoh (imagePath "" → carousel pakai fallback gradient, anti broken-image).
+  await prisma.banner.createMany({
+    data: [
+      {
+        title: "Hemat sampai 70% untuk langganan favoritmu",
+        subtitle:
+          "Gabung grup patungan Netflix, ChatGPT Plus, dan lainnya — bayar cukup bagianmu.",
+        ctaLabel: "Lihat Layanan",
+        ctaHref: "/marketplace",
+        order: 0,
+        active: true,
+        imagePath: "",
+      },
+      {
+        title: "Dana aman dengan escrow Ramean",
+        subtitle:
+          "Pembayaranmu ditahan sampai akses akun terverifikasi. Bebas dari penipuan.",
+        ctaLabel: "Mulai Gratis",
+        ctaHref: "/register",
+        order: 1,
+        active: true,
+        imagePath: "",
+      },
+    ],
+  });
+
   const counts = {
     users: await prisma.user.count(),
     services: await prisma.service.count(),
     groups: await prisma.group.count(),
+    banners: await prisma.banner.count(),
   };
   console.log("Seed selesai:", counts);
   console.log("Login demo: demo@ramean.id / password123 (saldo Rp50.000)");
