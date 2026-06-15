@@ -82,4 +82,15 @@ describe("API banner — guard & validasi", () => {
     const res = await POST(bannerForm({}));
     expect(res.status).toBe(400);
   });
+
+  it("upload dinonaktifkan → create tanpa gambar tetap 200, imagePath kosong", async () => {
+    vi.stubEnv("BANNER_UPLOAD_DISABLED", "true");
+    getServerSession.mockResolvedValue({ user: { id: "a1", role: "ADMIN" } });
+    const res = await POST(bannerForm({})); // tanpa file
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    const b = await prisma.banner.findUnique({ where: { id: data.id } });
+    expect(b.imagePath).toBe("");
+    vi.unstubAllEnvs();
+  });
 });

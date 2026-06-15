@@ -2,8 +2,32 @@
 // Jalankan: npm run db:seed  (atau otomatis lewat `prisma migrate reset`).
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
+const fs = require("fs");
+const path = require("path");
 
 const prisma = new PrismaClient();
+
+// Baca gambar banner yang tersedia di public/uploads/banners (lokal). Di lingkungan
+// tanpa file (mis. prod/CI), kembalikan [] → seed pakai banner fallback gradient.
+const BANNER_DIR = path.join(__dirname, "..", "public", "uploads", "banners");
+const IMG_RE = /\.(jpe?g|png|webp)$/i;
+
+function readBannerFiles() {
+  try {
+    return fs.readdirSync(BANNER_DIR).filter((f) => IMG_RE.test(f)).sort();
+  } catch {
+    return [];
+  }
+}
+
+const PROMO_TITLES = [
+  "Hemat sampai 70% untuk langganan favoritmu",
+  "Dana aman dengan escrow Ramean",
+  "Patungan praktis tanpa ribet",
+  "Akses layanan premium harga bersahabat",
+  "Satu platform untuk semua langgananmu",
+  "Gabung grup, langsung pakai hari ini",
+];
 
 // logoUrl menunjuk ke /public/assets. Layanan tanpa aset memakai "" — UI akan
 // fallback ke inisial berwarna (anti broken-image, lihat DoD).
@@ -138,31 +162,46 @@ async function main() {
     });
   }
 
-  // Banner promo contoh (imagePath "" → carousel pakai fallback gradient, anti broken-image).
-  await prisma.banner.createMany({
-    data: [
-      {
-        title: "Hemat sampai 70% untuk langganan favoritmu",
-        subtitle:
-          "Gabung grup patungan Netflix, ChatGPT Plus, dan lainnya — bayar cukup bagianmu.",
+  // Banner promo: pakai gambar di public/uploads/banners bila ada (lokal),
+  // selain itu fallback gradient + judul (imagePath "") agar prod/CI tetap berisi.
+  const bannerFiles = readBannerFiles();
+  if (bannerFiles.length > 0) {
+    await prisma.banner.createMany({
+      data: bannerFiles.map((file, i) => ({
+        title: PROMO_TITLES[i % PROMO_TITLES.length],
         ctaLabel: "Lihat Layanan",
         ctaHref: "/marketplace",
-        order: 0,
+        order: i,
         active: true,
-        imagePath: "",
-      },
-      {
-        title: "Dana aman dengan escrow Ramean",
-        subtitle:
-          "Pembayaranmu ditahan sampai akses akun terverifikasi. Bebas dari penipuan.",
-        ctaLabel: "Mulai Gratis",
-        ctaHref: "/register",
-        order: 1,
-        active: true,
-        imagePath: "",
-      },
-    ],
-  });
+        imagePath: `/uploads/banners/${file}`,
+      })),
+    });
+  } else {
+    await prisma.banner.createMany({
+      data: [
+        {
+          title: "Hemat sampai 70% untuk langganan favoritmu",
+          subtitle:
+            "Gabung grup patungan Netflix, ChatGPT Plus, dan lainnya — bayar cukup bagianmu.",
+          ctaLabel: "Lihat Layanan",
+          ctaHref: "/marketplace",
+          order: 0,
+          active: true,
+          imagePath: "",
+        },
+        {
+          title: "Dana aman dengan escrow Ramean",
+          subtitle:
+            "Pembayaranmu ditahan sampai akses akun terverifikasi. Bebas dari penipuan.",
+          ctaLabel: "Mulai Gratis",
+          ctaHref: "/register",
+          order: 1,
+          active: true,
+          imagePath: "",
+        },
+      ],
+    });
+  }
 
   const counts = {
     users: await prisma.user.count(),

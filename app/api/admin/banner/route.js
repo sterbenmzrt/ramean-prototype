@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin";
-import { validateImage, saveBannerImage, deleteBannerImage } from "@/lib/upload";
+import { validateImage, saveBannerImage, deleteBannerImage, isUploadEnabled } from "@/lib/upload";
 
 const fieldsSchema = z.object({
   title: z.string().trim().min(1, "Judul wajib diisi.").max(120),
@@ -45,11 +45,15 @@ export async function POST(request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.errors[0]?.message || "Input tidak valid." }, { status: 400 });
 
-  const file = form.get("image");
-  const imgErr = validateImage(file);
-  if (imgErr) return NextResponse.json({ error: imgErr }, { status: 400 });
-
-  const imagePath = await saveBannerImage(file);
+  // Upload aktif (lokal): wajib gambar valid. Upload nonaktif (prod): lewati,
+  // banner dibuat tanpa gambar → fallback blank di carousel.
+  let imagePath = "";
+  if (isUploadEnabled()) {
+    const file = form.get("image");
+    const imgErr = validateImage(file);
+    if (imgErr) return NextResponse.json({ error: imgErr }, { status: 400 });
+    imagePath = await saveBannerImage(file);
+  }
   const d = parsed.data;
   const banner = await prisma.banner.create({
     data: {
@@ -80,14 +84,16 @@ export async function PATCH(request) {
     return NextResponse.json({ error: parsed.error.errors[0]?.message || "Input tidak valid." }, { status: 400 });
   const d = parsed.data;
 
-  // Gambar opsional saat edit: kalau ada file baru valid → simpan & hapus lama.
+  // Gambar opsional saat edit: kalau upload aktif & ada file baru valid → ganti.
   let imagePath = existing.imagePath;
-  const file = form.get("image");
-  if (file && typeof file.arrayBuffer === "function") {
-    const imgErr = validateImage(file);
-    if (imgErr) return NextResponse.json({ error: imgErr }, { status: 400 });
-    imagePath = await saveBannerImage(file);
-    await deleteBannerImage(existing.imagePath);
+  if (isUploadEnabled()) {
+    const file = form.get("image");
+    if (file && typeof file.arrayBuffer === "function") {
+      const imgErr = validateImage(file);
+      if (imgErr) return NextResponse.json({ error: imgErr }, { status: 400 });
+      imagePath = await saveBannerImage(file);
+      await deleteBannerImage(existing.imagePath);
+    }
   }
 
   await prisma.banner.update({

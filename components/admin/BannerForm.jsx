@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import Btn from "@/components/ui/Btn";
 import Field, { inputClass } from "@/components/ui/Field";
 
-// mode: "create" | "edit"
-export default function BannerForm({ mode, initial = null }) {
+// mode: "create" | "edit". uploadEnabled=false (mis. produksi) → input gambar
+// disembunyikan, banner dibuat tanpa gambar (fallback blank).
+export default function BannerForm({ mode, initial = null, uploadEnabled = true }) {
   const router = useRouter();
   const [form, setForm] = useState({
     title: initial?.title || "",
@@ -31,7 +32,7 @@ export default function BannerForm({ mode, initial = null }) {
   async function submit(e) {
     e.preventDefault();
     setError("");
-    if (mode === "create" && !file) {
+    if (uploadEnabled && mode === "create" && !file) {
       setError("Gambar wajib diunggah.");
       return;
     }
@@ -89,12 +90,21 @@ export default function BannerForm({ mode, initial = null }) {
           <option value="false">Nonaktif</option>
         </select>
       </Field>
-      <Field label={mode === "edit" ? "Ganti Gambar (opsional)" : "Gambar"} htmlFor="image" hint="JPG/PNG/WEBP, maks 2 MB">
-        <input id="image" type="file" accept="image/jpeg,image/png,image/webp" onChange={onFile} className={inputClass} />
-      </Field>
-      {preview && (
-        <div className="mb-4">
-          <img src={preview} alt="Pratinjau banner" className="w-full h-40 object-cover rounded-lg border border-border" />
+      {uploadEnabled ? (
+        <>
+          <Field label={mode === "edit" ? "Ganti Gambar (opsional)" : "Gambar"} htmlFor="image" hint="JPG/PNG/WEBP, maks 2 MB">
+            <input id="image" type="file" accept="image/jpeg,image/png,image/webp" onChange={onFile} className={inputClass} />
+          </Field>
+          {preview && (
+            <div className="mb-4">
+              <img src={preview} alt="Pratinjau banner" className="w-full h-40 object-cover rounded-lg border border-border" />
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="mb-5 px-4 py-3 rounded-lg bg-warn-bg border border-warn/30 text-warn text-[13px] font-body">
+          Upload gambar dinonaktifkan di lingkungan ini. Banner tetap dibuat, namun tampil sebagai
+          placeholder (judul di atas latar gradient) sampai gambar tersedia.
         </div>
       )}
 
