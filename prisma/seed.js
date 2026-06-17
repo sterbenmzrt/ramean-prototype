@@ -99,6 +99,7 @@ async function main() {
   await prisma.group.deleteMany();
   await prisma.service.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.banner.deleteMany();
 
   const pw = await bcrypt.hash("password123", 10);
 
