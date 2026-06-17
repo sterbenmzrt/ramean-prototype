@@ -19,6 +19,11 @@ export const metadata = {
   title: "Ramean.id — Langganan Premium, Harga Terjangkau",
   description:
     "Platform patungan langganan digital dengan jaminan escrow. Netflix, Spotify, ChatGPT Plus, dan lainnya dengan harga jauh lebih hemat.",
+  icons: {
+    icon: "/assets/logo.png",
+    shortcut: "/assets/logo.png",
+    apple: "/assets/logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
