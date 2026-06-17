@@ -18,19 +18,22 @@ function reducedMotion() {
 // Slide non-aktif diredupkan, dikecilkan, dan diberi scrim agar "mundur" ke belakang
 // (efek peek/highlight ala Steam featured).
 function Slide({ banner, active, errored, onError }) {
+  const hasImage = banner.imagePath && !errored;
   const inner = (
     <div
-      className={`relative rounded-2xl overflow-hidden aspect-[1448/520] bg-gradient-to-br from-primary to-[#15315f] transition-all duration-700 ease-out ${
+      className={`relative rounded-2xl overflow-hidden transition-all duration-700 ease-out ${
+        hasImage ? "" : "aspect-[1448/520] bg-gradient-to-br from-primary to-[#15315f]"
+      } ${
         active
           ? "opacity-100 scale-100 shadow-[0_16px_48px_rgba(3,52,110,0.28)]"
           : "opacity-60 scale-[0.9]"
       }`}
     >
-      {banner.imagePath && !errored ? (
+      {hasImage ? (
         <img
           src={banner.imagePath}
           alt={banner.title || ""}
-          className={`w-full h-full object-cover transition-transform duration-[7000ms] ease-out ${
+          className={`block w-full h-auto transition-transform duration-[7000ms] ease-out ${
             active ? "scale-105" : "scale-100"
           }`}
           onError={onError}
@@ -98,7 +101,7 @@ export default function PromoCarousel({ banners = [] }) {
       <div className="max-w-[1320px] mx-auto px-4 relative">
         <div className="overflow-hidden py-2">
           <div
-            className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            className="flex items-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{ transform: `translateX(calc(${peek}% - ${idx * slideW}%))` }}
           >
             {banners.map((b, i) => (
